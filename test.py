@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import deque
 from threading import Lock
 import random
+import shutil
 
 # Constants
 DATA_DIRECTORY = "sensor_data"
@@ -20,11 +21,11 @@ MAX_DATA_POINTS = 1000  # Maximum number of data points to keep in memory
 PLOT_REFRESH_INTERVAL_MS = 100  # Interval to refresh the plot in milliseconds
 PLOT_CLEAR_INTERVAL_S = 30  # Interval to clear the plot in seconds
 
-# Directory to store generated CSV files
-os.makedirs(DATA_DIRECTORY, exist_ok=True)
 
 # Function to simulate sensor data generation and write to CSV
 def generate_sensor_data():
+    # Directory to store generated CSV files
+    os.makedirs(DATA_DIRECTORY, exist_ok=True)
     start_time = time.time()
     file_counter = 0
     data_buffer = []
@@ -118,6 +119,7 @@ def display_sensor_data():
     root.mainloop()
 
 if __name__ == "__main__":
+    shutil.rmtree(DATA_DIRECTORY)
     # Run the sensor data generation and display concurrently
     from threading import Thread
     Thread(target=generate_sensor_data, daemon=True).start()
