@@ -9,6 +9,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import deque
 from threading import Lock
 import random
+import numpy as np
 import shutil
 
 # Constants
@@ -17,7 +18,7 @@ FILE_LOCK = Lock()  # Lock to manage file access
 SENSOR_DATA_INTERVAL_MS = 1  # Interval to generate sensor data in milliseconds
 FILE_WRITE_INTERVAL_MS = 40  # Interval to write data to CSV file in milliseconds
 MAX_FILES = 25  # Maximum number of files to cycle through
-MAX_DATA_POINTS = 1000  # Maximum number of data points to keep in memory
+MAX_DATA_POINTS = 200000  # Maximum number of data points to keep in memory
 PLOT_REFRESH_INTERVAL_MS = 100  # Interval to refresh the plot in milliseconds
 PLOT_CLEAR_INTERVAL_S = 30  # Interval to clear the plot in seconds
 
@@ -99,11 +100,18 @@ def display_sensor_data():
                 ax.axhline(avg_value, color='r', linestyle='--', label=f"Average: {avg_value:.2f}")
                 ax.axhline(max_value, color='g', linestyle='--', label=f"Max: {max_value:.2f}")
                 ax.axhline(min_value, color='b', linestyle='--', label=f"Min: {min_value:.2f}")
-
+                
                 ax.set_xlabel("Time (s)")
                 ax.set_ylabel("Value")
                 ax.set_title("Real-Time Sensor Data")
                 # ax.legend()
+                # Set x-ticks manually to show more labels
+                x_values = combined_df["timestamp"] / 1000  # Convert timestamp to seconds
+                num_ticks = 20  # Number of ticks you want to display
+                tick_positions = np.linspace(x_values.min(), x_values.min()+8, num_ticks)
+                ax.set_xticks(tick_positions)
+                ax.tick_params(axis='x', rotation=45)  # Rotate x labels for better visibility
+
 
                 canvas.draw()
 
