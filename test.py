@@ -69,7 +69,7 @@ def display_sensor_data():
     root = tk.Tk()
     root.title("Real-Time Sensor Data Display")
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(12, 6))
     canvas = FigureCanvasTkAgg(fig, master=root)
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
